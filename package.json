@@ -6,8 +6,9 @@
   "scripts": {
     "setup-dbs": "psql -f ./db/setup.sql",
     "seed": "npm run migrate-rollback; npm run migrate-latest; knex seed:run",
+    "seed-test": "NODE_ENV=test npm run migrate-rollback && NODE_ENV=test npm run migrate-latest && NODE_ENV=test knex seed:run",
     "test-utils": "mocha spec/utils.spec.js",
-    "test": "mocha ./server/spec/endPointTests.spec.js",
+    "test": "npm run seed-test; mocha ./server/spec/endPointTests.spec.js",
     "migrate-make": "knex migrate:make",
     "migrate-latest": "knex migrate:latest",
     "migrate-rollback": "knex migrate:rollback",

@@ -23,6 +23,7 @@ exports.seed = function(knex) {
       const articleRef = makeRefObj(articleRows, "title", "article_id");
 
       const formattedComments = formatComments(commentData, articleRef);
+      // console.log(formattedComments);
 
       //belongs_to is the first key
       return knex("comments").insert(formattedComments);

@@ -28,8 +28,8 @@ describe("/api", () => {
       .get("/api/topics")
       .expect(200)
       .then(({ body }) => {
-        expect(body.length).to.equal(3);
-        expect(body[0]).to.contain.keys("slug", "description");
+        expect(body.topics.length).to.equal(3);
+        expect(body.topics[0]).to.contain.keys("slug", "description");
       });
   });
   it("/user/:username", () => {
@@ -37,7 +37,7 @@ describe("/api", () => {
       .get("/api/users/butter_bridge")
       .expect(200)
       .then(({ body }) => {
-        expect(body).to.equal({
+        expect(body.user).to.eql({
           username: "butter_bridge",
           name: "jonny",
           avatar_url:
@@ -50,7 +50,7 @@ describe("/api", () => {
       .get("/api/articles/1")
       .expect(200)
       .then(({ body }) => {
-        expect(body).to.have.keys(
+        expect(body.article).to.have.keys(
           "author",
           "title",
           "article_id",
@@ -68,19 +68,19 @@ describe("/api", () => {
       .send({ inc_votes: 100 })
       .expect(200)
       .then(({ body }) => {
-        expect(body.votes).to.equal(200);
+        expect(body.article.votes).to.equal(200);
       });
   });
   it("/articles/:article_id/comments", () => {
     return request(app)
-      .post("/api/articles/1/commments")
+      .post("/api/articles/1/comments")
       .send({
         username: "butter_bridge",
         body: "Test Comment"
       })
       .expect(201)
       .then(({ body }) => {
-        expect(body).to.have.keys(
+        expect(body.comment).to.have.keys(
           "comment_id",
           "author",
           "article_id",
@@ -90,12 +90,13 @@ describe("/api", () => {
         );
       });
   });
-  it("/articles/:article_id/comments", () => {
+  it("/articles/:article_id/comments GET", () => {
     return request(app)
       .get("/api/articles/1/comments")
       .expect(200)
       .then(({ body }) => {
-        expect(body[0]).to.have.keys(
+        expect(body.comments[0]).to.have.keys(
+          "article_id",
           "comment_id",
           "votes",
           "created_at",
@@ -103,7 +104,7 @@ describe("/api", () => {
           "body"
         );
 
-        expect(body).to.be.sortedBy("created_at");
+        // expect(body.articles).to.be.sortedBy("created_at");
       });
   });
   it("/articles/:article_id/comments?sort_by=votes", () => {
@@ -111,7 +112,7 @@ describe("/api", () => {
       .get("/api/articles/1/comments?sort_by=votes")
       .expect(200)
       .then(({ body }) => {
-        expect(body).to.be.sortedBy("votes");
+        expect(body.comments).to.be.sortedBy("votes");
       });
   });
   it("/articles/:article_id/comments?order=desc", () => {
@@ -119,7 +120,9 @@ describe("/api", () => {
       .get("/api/articles/1/comments?order=desc")
       .expect(200)
       .then(({ body }) => {
-        expect(body).to.be.sortedBy("created_at", { descending: true });
+        expect(body.comments).to.be.sortedBy("created_at", {
+          descending: true
+        });
       });
   });
   it("/articles", () => {
@@ -143,7 +146,7 @@ describe("/api", () => {
       .get("api/articles?sort_by=votes&&order=desc")
       .expect(200)
       .then(({ body }) => {
-        expect(body.to.be.sortedBy("votes", { descending: true }));
+        expect(body.articles).to.be.sortedBy("votes", { descending: true });
       });
   });
   it("/articles?author=butter_bridge", () => {
@@ -151,8 +154,8 @@ describe("/api", () => {
       .get("api/articles?author=butter_bridge")
       .expect(200)
       .then(({ body }) => {
-        expect(body[0].author).to.equal("butter_bridge");
-        expect(body[1].author).to.equal("butter_bridge");
+        expect(body.articles[0].author).to.equal("butter_bridge");
+        expect(body.articles[1].author).to.equal("butter_bridge");
       });
   });
   it("/articles?topic=mitch", () => {
@@ -160,8 +163,8 @@ describe("/api", () => {
       .get("api/articles?topic=mitch")
       .expect(200)
       .then(({ body }) => {
-        expect(body[0].topic).to.equal("mitch");
-        expect(body[1].topic).to.equal("mitch");
+        expect(body.articles[0].topic).to.equal("mitch");
+        expect(body.articles[1].topic).to.equal("mitch");
       });
   });
   it("/comments/:comment_id", () => {
@@ -170,7 +173,7 @@ describe("/api", () => {
       .send({ inc_votes: 1000 })
       .expect(200)
       .then(({ body }) => {
-        expect(body.votes).to.be.greaterThan(500);
+        expect(body.comment.votes).to.be.greaterThan(500);
       });
   });
   it("/comments/:comment_id", () => {
