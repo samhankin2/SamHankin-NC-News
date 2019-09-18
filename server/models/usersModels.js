@@ -4,8 +4,12 @@ exports.selectUserByUsername = username => {
   return connection
     .select("*")
     .from("users")
-    .where({ username: username })
+    .where({ username })
     .then(data => {
-      return data[0];
+      if (data.length != 0) return data[0];
+      return Promise.reject({
+        status: 400,
+        msg: `username:${username} is not in the database`
+      });
     });
 };

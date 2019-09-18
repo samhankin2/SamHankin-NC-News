@@ -9,6 +9,7 @@
     "seed-test": "NODE_ENV=test npm run migrate-rollback && NODE_ENV=test npm run migrate-latest && NODE_ENV=test knex seed:run",
     "test-utils": "mocha spec/utils.spec.js",
     "test": "npm run seed-test; mocha ./server/spec/endPointTests.spec.js",
+    "test-errors": "npm run seed-test; mocha ./server/spec/errorHandlingTests.spec.js",
     "migrate-make": "knex migrate:make",
     "migrate-latest": "knex migrate:latest",
     "migrate-rollback": "knex migrate:rollback",

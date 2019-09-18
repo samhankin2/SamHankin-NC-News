@@ -11,17 +11,6 @@ after(() => {
   connection.destroy();
 });
 
-describe("/not-valid-route", () => {
-  it("returns a 404 error when an invalid route is used", () => {
-    return request(app)
-      .get("/hellocheeky")
-      .expect(404)
-      .then(({ body }) => {
-        expect(body.msg).to.equal("route not found");
-      });
-  });
-});
-
 describe("/api", () => {
   it("/topics", () => {
     return request(app)
@@ -50,7 +39,7 @@ describe("/api", () => {
       .get("/api/articles/1")
       .expect(200)
       .then(({ body }) => {
-        expect(body.article).to.have.keys(
+        expect(body.article[0]).to.have.keys(
           "author",
           "title",
           "article_id",
@@ -62,7 +51,7 @@ describe("/api", () => {
         );
       });
   });
-  it("/articles/:article_id", () => {
+  it("/articles/:article_id PATCH", () => {
     return request(app)
       .patch("/api/articles/1")
       .send({ inc_votes: 100 })
@@ -112,7 +101,7 @@ describe("/api", () => {
       .get("/api/articles/1/comments?sort_by=votes")
       .expect(200)
       .then(({ body }) => {
-        expect(body.comments).to.be.sortedBy("votes");
+        expect(body.comments).to.be.sortedBy("votes", { descending: true });
       });
   });
   it("/articles/:article_id/comments?order=desc", () => {
@@ -130,7 +119,7 @@ describe("/api", () => {
       .get("/api/articles")
       .expect(200)
       .then(({ body }) => {
-        expect(body[0]).to.contain.keys(
+        expect(body.articles[0]).to.contain.keys(
           "author",
           "title",
           "article_id",
@@ -141,17 +130,19 @@ describe("/api", () => {
         );
       });
   });
-  it("/articles?sort_by=votes&&order=desc", () => {
+  it("/articles?order=desc", () => {
     return request(app)
-      .get("api/articles?sort_by=votes&&order=desc")
+      .get("/api/articles?order=desc")
       .expect(200)
       .then(({ body }) => {
-        expect(body.articles).to.be.sortedBy("votes", { descending: true });
+        expect(body.articles).to.be.sortedBy("created_at", {
+          descending: true
+        });
       });
   });
   it("/articles?author=butter_bridge", () => {
     return request(app)
-      .get("api/articles?author=butter_bridge")
+      .get("/api/articles?author=butter_bridge")
       .expect(200)
       .then(({ body }) => {
         expect(body.articles[0].author).to.equal("butter_bridge");
@@ -160,7 +151,7 @@ describe("/api", () => {
   });
   it("/articles?topic=mitch", () => {
     return request(app)
-      .get("api/articles?topic=mitch")
+      .get("/api/articles?topic=mitch")
       .expect(200)
       .then(({ body }) => {
         expect(body.articles[0].topic).to.equal("mitch");
@@ -169,7 +160,7 @@ describe("/api", () => {
   });
   it("/comments/:comment_id", () => {
     return request(app)
-      .patch("api/comments/1")
+      .patch("/api/comments/1")
       .send({ inc_votes: 1000 })
       .expect(200)
       .then(({ body }) => {
@@ -178,7 +169,7 @@ describe("/api", () => {
   });
   it("/comments/:comment_id", () => {
     return request(app)
-      .delete("api/comments/1")
+      .delete("/api/comments/1")
       .expect(204);
   });
 });
