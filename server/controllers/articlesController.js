@@ -39,7 +39,7 @@ exports.postCommentByArticleId = (req, res, next) => {
       res.status(201).send({ comment: postedComment[0] });
     })
     .catch(err => {
-      console.log(body);
+      // console.log(body);
       err.input = article_id;
       err.inputBody = JSON.stringify(body);
       // console.log(req.body.toString());

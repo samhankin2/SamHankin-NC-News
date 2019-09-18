@@ -44,7 +44,7 @@ describe("/api", () => {
           .get("/api/articles/not-an-int")
           .expect(400)
           .then(({ body }) => {
-            console.log(body.msg);
+            // console.log(body.msg);
             expect(body.msg).to.equal("Invalid input for:not-an-int");
           });
       });
@@ -53,7 +53,7 @@ describe("/api", () => {
           .get("/api/articles/7965")
           .expect(404)
           .then(({ body }) => {
-            console.log(body);
+            // console.log(body);
             expect(body.msg).to.equal("article_id:7965 is not in the database");
           });
       });

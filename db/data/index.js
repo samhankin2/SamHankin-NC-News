@@ -5,5 +5,5 @@ const data = {
   development: devData,
   test: testData
 };
-console.log(ENV);
+// console.log(ENV);
 module.exports = data[ENV];
