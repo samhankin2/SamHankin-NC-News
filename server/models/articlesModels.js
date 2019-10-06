@@ -15,7 +15,7 @@ exports.selectArticleById = id => {
           status: 404
         });
 
-      return data;
+      return data[0];
     });
 };
 
@@ -108,7 +108,7 @@ exports.selectCommentsByArticleId = (id, sortby, order) => {
 };
 
 exports.selectArticles = query => {
-  const sort = query.sortby || "created_at";
+  const sort = query.sort_by || "created_at";
   let order = query.order || "desc";
 
   if (order != "desc" && order != "asc") {
@@ -130,20 +130,63 @@ exports.selectArticles = query => {
     .leftJoin("comments", "articles.article_id", "comments.article_id")
     .groupBy("articles.article_id")
     .then(data => {
-      let invalid = "";
-
-      if (!data.length) {
-        if (query.author) {
-          invalid += query.author + " ";
-        }
-        if (query.topic) {
-          invalid += query.topic;
-        }
-        return Promise.reject({
-          msg: "No articles by: " + invalid,
-          status: 404
-        });
+      if (!data.length && query.author) {
+        return Promise.all([data, doesExist(query.author)]);
       }
+
+      if (!data.length && query.topic) {
+        return Promise.all([data, doesExistTopic(query.topic)]);
+      }
+      // console.log(data);
+      return Promise.all([data]);
+    })
+    .then(([data]) => {
+      // console.log("hello");
       return data;
+    });
+};
+
+doesExist = query => {
+  return connection
+    .select("*")
+    .from("users")
+    .where({ username: query })
+    .then(data => {
+      // console.log(data);
+      if (data.length) return true;
+      return Promise.reject({
+        msg: "user not found in the database",
+        status: 404
+      });
+    });
+};
+
+doesExistTopic = query => {
+  return connection
+    .select("*")
+    .from("topics")
+    .where({ slug: query })
+    .then(data => {
+      // console.log(data);
+      if (data.length) return true;
+      return Promise.reject({
+        msg: "topic not found in the database",
+        status: 404
+      });
+    });
+};
+
+doesExistComment = query => {
+  return connection
+    .select("*")
+    .from("topics")
+    .where({ slug: query })
+    .then(data => {
+      console.log(data);
+      if (data.length) return true;
+      return Promise.reject({
+        msg: "topic not found in the database",
+        status: 404
+      });
     });
 };

@@ -4,7 +4,12 @@ const {
   removeCommentById
 } = require("../controllers/commentsController");
 
-commentsRouter.patch("/:comment_id", patchCommentVotesById);
-commentsRouter.delete("/:comment_id", removeCommentById);
+const invalidMethod = require("./invalidMethod");
+
+commentsRouter
+  .route("/:comment_id")
+  .patch(patchCommentVotesById)
+  .delete(removeCommentById)
+  .all(invalidMethod);
 
 module.exports = commentsRouter;

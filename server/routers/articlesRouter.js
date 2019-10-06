@@ -7,10 +7,22 @@ const {
   getArticles
 } = require("../controllers/articlesController");
 
-articlesRouter.get("/:article_id", getArticleById);
-articlesRouter.patch("/:article_id", patchArticleById);
-articlesRouter.post("/:article_id/comments", postCommentByArticleId);
-articlesRouter.get("/:article_id/comments", getCommentsByArticleId);
-articlesRouter.get("/", getArticles);
+const invalidMethod = require("./invalidMethod");
 
+articlesRouter
+  .route("/:article_id")
+  .get(getArticleById)
+  .patch(patchArticleById)
+  .all(invalidMethod);
+
+articlesRouter
+  .route("/:article_id/comments")
+  .post(postCommentByArticleId)
+  .get(getCommentsByArticleId)
+  .all(invalidMethod);
+
+articlesRouter
+  .route("/")
+  .get(getArticles)
+  .all(invalidMethod);
 module.exports = articlesRouter;

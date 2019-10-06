@@ -1,5 +1,5 @@
 exports.up = function(knex) {
-  console.log("creating the articles table...");
+  // console.log("creating the articles table...");
   return knex.schema.createTable("articles", articlesTable => {
     articlesTable.increments("article_id").primary();
     articlesTable.string("title").notNullable();

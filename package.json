@@ -13,7 +13,8 @@
     "migrate-make": "knex migrate:make",
     "migrate-latest": "knex migrate:latest",
     "migrate-rollback": "knex migrate:rollback",
-    "start-server": "nodemon ./server/listen.js"
+    "start-server": "nodemon ./server/listen.js",
+    "start-server-test": "NODE_ENV=test nodemon ./server/listen.js"
   },
   "repository": {
     "type": "git",

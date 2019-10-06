@@ -12,6 +12,7 @@ app.all("/*", (req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
+  // console.log(err);
   let codeRef = {
     "22P02": { msg: "Invalid input for:" + err.input, status: 400 },
     "22003": { msg: "Too Large an int:" + err.input, status: 400 },
@@ -19,7 +20,8 @@ app.use((err, req, res, next) => {
     "23503": {
       msg: "Article_id is not found in the database:" + err.input,
       status: 404
-    }
+    },
+    "42703": { msg: `column "${err.sort_by}" does not exist`, status: 400 }
   };
 
   let statusRef = {

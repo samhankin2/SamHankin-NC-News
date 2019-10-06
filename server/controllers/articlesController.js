@@ -55,9 +55,12 @@ exports.getCommentsByArticleId = (req, res, next) => {
     })
     .catch(err => {
       err.input = article_id;
+      err.sort_by = sort_by;
+      err.order = order;
       next(err);
     });
 };
+
 exports.getArticles = (req, res, next) => {
   selectArticles(req.query)
     .then(articles => {

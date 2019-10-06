@@ -25,10 +25,10 @@ describe("/not-valid-route", () => {
 describe("/api", () => {
   describe("/users/:username", () => {
     describe("GET:", () => {
-      it("400: Username is not in the database", () => {
+      it("404: Username is not in the database", () => {
         return request(app)
           .get("/api/users/not-a-user-name")
-          .expect(400)
+          .expect(404)
           .then(({ body }) => {
             expect(body.msg).to.equal(
               "username:not-a-user-name is not in the database"

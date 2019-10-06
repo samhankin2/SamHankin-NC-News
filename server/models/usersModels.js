@@ -8,7 +8,7 @@ exports.selectUserByUsername = username => {
     .then(data => {
       if (data.length != 0) return data[0];
       return Promise.reject({
-        status: 400,
+        status: 404,
         msg: `username:${username} is not in the database`
       });
     });
