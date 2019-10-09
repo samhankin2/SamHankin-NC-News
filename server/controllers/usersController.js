@@ -8,6 +8,7 @@ exports.getusersByUsername = (req, res, next) => {
   const { username } = req.params;
   selectUserByUsername(username)
     .then(user => {
+      delete user.password;
       res.send({ user });
     })
     .catch(err => {
