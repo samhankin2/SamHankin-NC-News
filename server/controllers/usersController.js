@@ -28,6 +28,7 @@ exports.postNewUser = (req, res, next) => {
       res.status(201).send({ newUser });
     })
     .catch(err => {
+      console.log(err);
       next(err);
     });
 

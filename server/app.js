@@ -24,7 +24,8 @@ app.use((err, req, res, next) => {
       msg: "Article_id is not found in the database:" + err.input,
       status: 404
     },
-    "42703": { msg: `column "${err.sort_by}" does not exist`, status: 400 }
+    "42703": { msg: `column "${err.sort_by}" does not exist`, status: 400 },
+    "23505": { msg: "Username Already Exists", status: 400 }
   };
 
   let statusRef = {
