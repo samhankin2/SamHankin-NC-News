@@ -23,7 +23,7 @@ exports.postNewUser = (req, res, next) => {
   const hash = bcrypt.hashSync(password, 10);
 
   insertUserAndPassword(username, hash).then(newUser => {
-    res.send({ newUser });
+    res.status.send({ newUser });
   });
 
   // .catch(err => {

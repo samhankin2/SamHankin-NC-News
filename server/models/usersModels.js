@@ -30,6 +30,5 @@ exports.insertUserAndPassword = (username, password) => {
       //   console.log(postedComment);
       delete postedUser.password;
       return postedUser;
-    })
-    .catch(err => {});
+    });
 };
