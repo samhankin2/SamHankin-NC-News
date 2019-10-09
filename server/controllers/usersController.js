@@ -22,9 +22,13 @@ exports.postNewUser = (req, res, next) => {
 
   const hash = bcrypt.hashSync(password, 10);
 
-  insertUserAndPassword(username, hash).then(newUser => {
-    res.status(201).send({ newUser });
-  });
+  insertUserAndPassword(username, hash)
+    .then(newUser => {
+      res.status(201).send({ newUser });
+    })
+    .catch(err => {
+      next(err);
+    });
 
   // .catch(err => {
   //   // console.log(body);
