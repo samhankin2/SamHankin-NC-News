@@ -7,6 +7,7 @@ const invalidMethod = require("./invalidMethod");
 
 usersRouter.get("/:username", getusersByUsername);
 usersRouter.post("/", postNewUser);
+usersRouter.all("/", invalidMethod);
 usersRouter.all("/:username", invalidMethod);
 
 module.exports = usersRouter;
