@@ -21,10 +21,9 @@ exports.postNewUser = (req, res, next) => {
   const { password } = req.body;
 
   const hash = bcrypt.hashSync(password, 10);
-  console.log(hash);
 
   insertUserAndPassword(username, hash).then(newUser => {
-    console.log(newUser);
+    res.send({ newUser });
   });
 
   // .catch(err => {

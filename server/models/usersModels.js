@@ -15,7 +15,6 @@ exports.selectUserByUsername = username => {
 };
 
 exports.insertUserAndPassword = (username, password) => {
-  console.log(username, password);
   let insertedObject = {
     username,
     avatar_url:
